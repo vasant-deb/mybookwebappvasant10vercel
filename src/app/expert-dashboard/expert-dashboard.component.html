@@ -1,0 +1,87 @@
+<button (click)="logout()">Logout</button>
+
+<div class="container">
+    <h2>Expert Dashboard</h2>
+  
+    <!-- View All Requests -->
+    <div>
+      <h3>All Requests</h3>
+    
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>CustomerID</th>
+           
+            <th>Status</th>
+            <th>Hours Required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="taskQueue.length > 0; else noTasks">
+            <!-- Task List -->
+            <ng-container *ngFor="let task of taskQueue">
+              <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.details }}</td>
+                <td>{{ task.user_id }}</td>
+               
+                <td>
+                  <select [(ngModel)]="task.status" (ngModelChange)="onStatusChange(task, $event)">
+                    <option *ngFor="let option of statusOptions" [value]="option.value">{{ option.label }}</option>
+                  </select>
+                </td>
+                <td *ngIf="task.hours===null">
+                
+                  <input type="text" [(ngModel)]="task.updatedHours"/>
+                  <button (click)="updateHours(task)">Update</button>
+                </td>
+                <td *ngIf="task.hours!=null">
+                   {{task.hours}}
+                  </td>
+              </tr>
+            </ng-container>
+      
+          </ng-container>
+      
+          <!-- If no tasks display below ---->
+          <ng-template #noTasks>
+            <tr>
+              <td colspan="4">
+                No Tasks Found!
+              </td>
+            </tr>
+          </ng-template>
+          
+      
+        </tbody>
+      </table>
+    </div>
+  
+    <hr>
+  
+    <!-- Resolved Requests -->
+    <div>
+      <h3>Resolved Requests</h3>
+      <table class="table table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>Title</th>
+            <th>Details</th>
+            <th>Assigned To</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let resolvedRequest of completedTasks">
+            <td>{{resolvedRequest.title}}</td>
+            <td>{{resolvedRequest.details}}</td>
+            <td>{{resolvedRequest.assignedTo}}</td>
+            <td>{{resolvedRequest.status}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
